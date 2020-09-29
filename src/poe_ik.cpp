@@ -823,10 +823,7 @@ void iksolve(Matrix4d &Ton_new, int &n_it) {
 			// prev_leg_dofs += leg_dof;
 
 			// update kinematics
-			//dh = 
-			//baseFrame = ;
-			//toolFrame = 
-			//cout<<xyz<<endl;
+			
 			Ton = fkine((*(VERNE.Leg_it))->legParam->extDenHart, (*(VERNE.Leg_it))->legParam->baseFrame, (*(VERNE.Leg_it))->legParam->toolFrame, (*(VERNE.Leg_it))->jointAngles);
 			(*(VERNE.Leg_it))->Ton = Ton;
 			//cout<<xyz<<endl;
@@ -864,7 +861,7 @@ void iksolve(Matrix4d &Ton_new, int &n_it) {
 
 int main()
 {
-
+	//Todo ROS Stuff
 	
 	t_kinParam leg_11, leg_12, leg_II, leg_III;
 
