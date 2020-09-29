@@ -1,0 +1,8 @@
+prefix=/home/neil/catkin_ws/src/poe_ik/build/devel
+
+Name: poe_ik
+Description: Description of poe_ik
+Version: 0.0.0
+Cflags: -I/home/neil/catkin_ws/src/poe_ik/include
+Libs: -L${prefix}/lib -lpoe_ik
+Requires: roscpp rospy std_msgs

@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/neil/catkin_ws/src/poe_ik/build/devel/setup.sh
