@@ -1,98 +1,92 @@
 [
 {
   "directory": "/home/neil/catkin_ws/src/poe_ik/build",
-  "command": "/usr/bin/g++-7  -DPkm_EXPORTS -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -std=c++11 -o CMakeFiles/Pkm.dir/src/Pkm.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/Pkm.cpp",
-  "file": "/home/neil/catkin_ws/src/poe_ik/src/Pkm.cpp"
-},
-
-{
-  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
-  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -Dqr_EXPORTS -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -std=c++11 -o CMakeFiles/qr.dir/src/SVD/qr.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/qr.cpp",
-  "file": "/home/neil/catkin_ws/src/poe_ik/src/SVD/qr.cpp"
-},
-
-{
-  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
-  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -Dsvd_EXPORTS -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -std=c++11 -o CMakeFiles/svd.dir/src/SVD/svd.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/svd.cpp",
-  "file": "/home/neil/catkin_ws/src/poe_ik/src/SVD/svd.cpp"
-},
-
-{
-  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
-  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -Dlq_EXPORTS -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -std=c++11 -o CMakeFiles/lq.dir/src/SVD/lq.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/lq.cpp",
-  "file": "/home/neil/catkin_ws/src/poe_ik/src/SVD/lq.cpp"
-},
-
-{
-  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
-  "command": "/usr/bin/g++-7  -DElapsed_EXPORTS -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -std=c++11 -o CMakeFiles/Elapsed.dir/src/Elapsed.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/Elapsed.cpp",
-  "file": "/home/neil/catkin_ws/src/poe_ik/src/Elapsed.cpp"
-},
-
-{
-  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
-  "command": "/usr/bin/g++-7  -DLink_EXPORTS -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -std=c++11 -o CMakeFiles/Link.dir/src/Link.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/Link.cpp",
-  "file": "/home/neil/catkin_ws/src/poe_ik/src/Link.cpp"
-},
-
-{
-  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
-  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -DRobot_EXPORTS -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -std=c++11 -o CMakeFiles/Robot.dir/src/Robot.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/Robot.cpp",
-  "file": "/home/neil/catkin_ws/src/poe_ik/src/Robot.cpp"
-},
-
-{
-  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
-  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -DSerialChain_EXPORTS -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -std=c++11 -o CMakeFiles/SerialChain.dir/src/SerialChain.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SerialChain.cpp",
-  "file": "/home/neil/catkin_ws/src/poe_ik/src/SerialChain.cpp"
-},
-
-{
-  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
-  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -Dbidiagonal_EXPORTS -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -std=c++11 -o CMakeFiles/bidiagonal.dir/src/SVD/bidiagonal.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/bidiagonal.cpp",
-  "file": "/home/neil/catkin_ws/src/poe_ik/src/SVD/bidiagonal.cpp"
-},
-
-{
-  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
-  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -Dblas_EXPORTS -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -std=c++11 -o CMakeFiles/blas.dir/src/SVD/blas.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/blas.cpp",
-  "file": "/home/neil/catkin_ws/src/poe_ik/src/SVD/blas.cpp"
-},
-
-{
-  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
-  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -Dpoe_ik_EXPORTS -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -std=c++11 -o CMakeFiles/poe_ik.dir/src/poe_ik.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/poe_ik.cpp",
-  "file": "/home/neil/catkin_ws/src/poe_ik/src/poe_ik.cpp"
-},
-
-{
-  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
   "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/poe_ik_node.dir/src/poe_ik.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/poe_ik.cpp",
   "file": "/home/neil/catkin_ws/src/poe_ik/src/poe_ik.cpp"
 },
 
 {
   "directory": "/home/neil/catkin_ws/src/poe_ik/build",
-  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -Dap_EXPORTS -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -std=c++11 -o CMakeFiles/ap.dir/src/SVD/ap.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/ap.cpp",
+  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/poe_ik_node.dir/src/Elapsed.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/Elapsed.cpp",
+  "file": "/home/neil/catkin_ws/src/poe_ik/src/Elapsed.cpp"
+},
+
+{
+  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
+  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/poe_ik_node.dir/src/Link.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/Link.cpp",
+  "file": "/home/neil/catkin_ws/src/poe_ik/src/Link.cpp"
+},
+
+{
+  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
+  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/poe_ik_node.dir/src/Pkm.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/Pkm.cpp",
+  "file": "/home/neil/catkin_ws/src/poe_ik/src/Pkm.cpp"
+},
+
+{
+  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
+  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/poe_ik_node.dir/src/Robot.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/Robot.cpp",
+  "file": "/home/neil/catkin_ws/src/poe_ik/src/Robot.cpp"
+},
+
+{
+  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
+  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/poe_ik_node.dir/src/SerialChain.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SerialChain.cpp",
+  "file": "/home/neil/catkin_ws/src/poe_ik/src/SerialChain.cpp"
+},
+
+{
+  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
+  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/poe_ik_node.dir/src/SVD/ap.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/ap.cpp",
   "file": "/home/neil/catkin_ws/src/poe_ik/src/SVD/ap.cpp"
 },
 
 {
   "directory": "/home/neil/catkin_ws/src/poe_ik/build",
-  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -Dreflections_EXPORTS -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -std=c++11 -o CMakeFiles/reflections.dir/src/SVD/reflections.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/reflections.cpp",
-  "file": "/home/neil/catkin_ws/src/poe_ik/src/SVD/reflections.cpp"
-},
-
-{
-  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
-  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -Dbdsvd_EXPORTS -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -std=c++11 -o CMakeFiles/bdsvd.dir/src/SVD/bdsvd.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/bdsvd.cpp",
+  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/poe_ik_node.dir/src/SVD/bdsvd.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/bdsvd.cpp",
   "file": "/home/neil/catkin_ws/src/poe_ik/src/SVD/bdsvd.cpp"
 },
 
 {
   "directory": "/home/neil/catkin_ws/src/poe_ik/build",
-  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -Drotations_EXPORTS -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -std=c++11 -o CMakeFiles/rotations.dir/src/SVD/rotations.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/rotations.cpp",
+  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/poe_ik_node.dir/src/SVD/bidiagonal.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/bidiagonal.cpp",
+  "file": "/home/neil/catkin_ws/src/poe_ik/src/SVD/bidiagonal.cpp"
+},
+
+{
+  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
+  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/poe_ik_node.dir/src/SVD/blas.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/blas.cpp",
+  "file": "/home/neil/catkin_ws/src/poe_ik/src/SVD/blas.cpp"
+},
+
+{
+  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
+  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/poe_ik_node.dir/src/SVD/lq.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/lq.cpp",
+  "file": "/home/neil/catkin_ws/src/poe_ik/src/SVD/lq.cpp"
+},
+
+{
+  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
+  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/poe_ik_node.dir/src/SVD/qr.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/qr.cpp",
+  "file": "/home/neil/catkin_ws/src/poe_ik/src/SVD/qr.cpp"
+},
+
+{
+  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
+  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/poe_ik_node.dir/src/SVD/reflections.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/reflections.cpp",
+  "file": "/home/neil/catkin_ws/src/poe_ik/src/SVD/reflections.cpp"
+},
+
+{
+  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
+  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/poe_ik_node.dir/src/SVD/rotations.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/rotations.cpp",
   "file": "/home/neil/catkin_ws/src/poe_ik/src/SVD/rotations.cpp"
+},
+
+{
+  "directory": "/home/neil/catkin_ws/src/poe_ik/build",
+  "command": "/usr/bin/g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"poe_ik\\\" -I../src -isystem /usr/include/eigen3 -I../include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/poe_ik_node.dir/src/SVD/svd.cpp.o -c /home/neil/catkin_ws/src/poe_ik/src/SVD/svd.cpp",
+  "file": "/home/neil/catkin_ws/src/poe_ik/src/SVD/svd.cpp"
 },
 
 {

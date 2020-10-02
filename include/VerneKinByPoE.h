@@ -47,7 +47,7 @@ void Initialize(void);
 
 MatrixXd pinv(MatrixXd M);
 // Matd pinv2(Matd &);
-Matrix4d linkTransform(VectorXd &dh_link_param, double &current_joint_angle);
+Matrix4d linkTransform(VectorXd dh_link_param, double current_joint_angle);
 
 inline VectorXd quickTr2Diff(Matrix4d &m)
 {
@@ -274,11 +274,12 @@ inline Matrix4d linkTransformMod(VectorXd dh_link_param, double current_joint_an
 	return T;
 }
 
-inline Matrix4d linkTransform(VectorXd &dh_link_param, double &current_joint_angle)
+inline Matrix4d linkTransform(VectorXd dh_link_param, double current_joint_angle)
 {
 	// Link to link transformation matrix 
 	// based on standard notation
 	// remember: dh_param has one more element at the beggining (because of cos(alpha) and sin(alpha))
+	//std::cout<<current_joint_angle<<std::endl;
 	double theta, Ct, St, D;
 	Matrix4d T(Matrix4d::Identity());
 

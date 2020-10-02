@@ -52,22 +52,7 @@ include_directories(
 include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
 
 ## Declare a C++ library
- add_library(${PROJECT_NAME} src/poe_ik.cpp)
- add_library(Elapsed src/Elapsed.cpp)
- add_library(Link src/Link.cpp)
- add_library(Pkm src/Pkm.cpp)
- add_library(Robot src/Robot.cpp)
- add_library(SerialChain src/SerialChain.cpp)
 
- add_library(ap src/SVD/ap.cpp)
- add_library(bdsvd src/SVD/bdsvd.cpp)
- add_library(bidiagonal src/SVD/bidiagonal.cpp)
- add_library(blas src/SVD/blas.cpp)
- add_library(lq src/SVD/lq.cpp)
- add_library(qr src/SVD/qr.cpp)
- add_library(reflections src/SVD/reflections.cpp)
- add_library(rotations src/SVD/rotations.cpp)
- add_library(svd src/SVD/svd.cpp)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -80,7 +65,7 @@ include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
 
 
 
-add_executable(${PROJECT_NAME}_node src/poe_ik.cpp)
+add_executable(${PROJECT_NAME}_node src/poe_ik.cpp src/Elapsed.cpp src/Link.cpp src/Link.cpp src/Pkm.cpp src/Robot.cpp src/SerialChain.cpp src/SVD/ap.cpp src/SVD/bdsvd.cpp src/SVD/bidiagonal.cpp src/SVD/blas.cpp src/SVD/lq.cpp src/SVD/qr.cpp src/SVD/reflections.cpp src/SVD/rotations.cpp src/SVD/svd.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -95,23 +80,8 @@ add_executable(${PROJECT_NAME}_node src/poe_ik.cpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_node
    ${catkin_LIBRARIES}
-   Elapsed
-   Link
-   Pkm
-   Robot
-   SerialChain
-   
-   svd
  )
- target_link_libraries(svd
-    ap
-   bdsvd
-   bidiagonal
-   blas
-   lq
-   qr
-   reflections
-   rotations)
+
  
 target_link_libraries(poe_ik_node ${catkin_LIBRARIES} ${EIGEN3_LIBRARIES})
 
