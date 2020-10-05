@@ -15,11 +15,20 @@
 #include <Eigen/Eigen>
 #include <Eigen/Geometry>
 
+#include "ros/ros.h"
+#include "std_msgs/String.h"
+#include "std_msgs/Float64MultiArray.h"
+#include "geometry_msgs/PoseStamped.h"
+
+using std::cout;
+using std::endl;
+
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using Eigen::Matrix3d;
 using Eigen::Matrix4d;
 using Eigen::Vector3d;
+using Eigen::Vector4d;
 
 std::vector<MatrixXd> DH_Parameters;
 std::vector<MatrixXd>::iterator DH_Parameters_it;
@@ -48,6 +57,58 @@ void Initialize(void);
 MatrixXd pinv(MatrixXd M);
 // Matd pinv2(Matd &);
 Matrix4d linkTransform(VectorXd dh_link_param, double current_joint_angle);
+
+Matrix4d transformFromPose(Vector4d &q, Vector3d &p);
+
+void iksolve(Matrix4d &Ton_new, int &n_it);
+Matrix4d homeTon;
+
+//Ros subscriber/publisher
+class SubscribeAndPublish
+{
+public:
+  	SubscribeAndPublish()
+  	{
+    	//Topic you want to publish
+    	pub_ = n_.advertise<std_msgs::Float64MultiArray>("/arm/joint_group_position_controller/command", 1000);
+    	//Topic you want to subscribe
+    	sub_ = n_.subscribe("/ik_goal", 1000, &SubscribeAndPublish::ikCallback, this);
+  	}
+
+ 
+  	void ikCallback(const geometry_msgs::PoseStamped::ConstPtr& msg) {
+
+		Vector3d pos = (Vector3d()<<msg->pose.position.x,msg->pose.position.y,msg->pose.position.z).finished();
+		Vector4d quat = (Vector4d()<<msg->pose.orientation.x,msg->pose.orientation.y,msg->pose.orientation.z,msg->pose.orientation.w).finished();
+		Matrix4d Ton_new = homeTon * transformFromPose(quat,pos) ;
+		int n_it=0;
+		//cout<<Ton_new<<endl;
+		iksolve(Ton_new,n_it);
+		std_msgs::Float64MultiArray ja;
+		ja.data.clear();
+
+		for((VERNE.Leg_it) = VERNE.Leg.begin(); (VERNE.Leg_it) <  VERNE.Leg.end(); ++(VERNE.Leg_it))  {
+			//cout<<(*(VERNE.Leg_it))->jointAngles<<endl;
+			//cout<<(*(VERNE.Leg_it))->Ton<<endl;
+			for (int i = 0; i < (*(VERNE.Leg_it))->jointAngles.size(); i++){
+				ja.data.push_back((*(VERNE.Leg_it))->jointAngles(i));
+				//cout<<ja.data[i]<<endl;
+			}
+			
+		}
+		pub_.publish(ja);
+		ros::spinOnce();
+		cout<<n_it<<endl;
+  	}
+
+
+private:
+  	ros::NodeHandle n_; 
+  	ros::Publisher pub_;
+  	ros::Subscriber sub_;
+
+};//End of class SubscribeAndPublish
+
 
 inline VectorXd quickTr2Diff(Matrix4d &m)
 {
@@ -302,6 +363,17 @@ inline Matrix4d linkTransform(VectorXd dh_link_param, double current_joint_angle
 	
 	return T;
 }
+
+
+inline Matrix4d transformFromPose(Vector4d &q, Vector3d &p){
+
+	Matrix4d T = (Matrix4d()<< 1.0f - 2.0f*q(1)*q(1) - 2.0f*q(2)*q(2), 2.0f*q(0)*q(1) - 2.0f*q(2)*q(3), 2.0f*q(0)*q(2) + 2.0f*q(1)*q(3), p(0),
+    				2.0f*q(0)*q(1) + 2.0f*q(2)*q(3), 1.0f - 2.0f*q(0)*q(0) - 2.0f*q(2)*q(2), 2.0f*q(1)*q(2) - 2.0f*q(0)*q(3), p(1),
+    				2.0f*q(0)*q(2) - 2.0f*q(1)*q(3), 2.0f*q(1)*q(2) + 2.0f*q(0)*q(3), 1.0f - 2.0f*q(0)*q(0) - 2.0f*q(1)*q(1), p(2),
+    				0.0f, 0.0f, 0.0f, 1.0f).finished();
+	return T;
+}
+
 
 //From Modern Robotics textbook  - (git)
 

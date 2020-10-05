@@ -9,12 +9,12 @@ from std_msgs.msg import Bool
 
 rospy.init_node('keyboard_ikgoal_driver')
 
-ik_goal_r_pub = rospy.Publisher('/ik_goal_r',PoseStamped,queue_size=5)
+ik_goal_r_pub = rospy.Publisher('/ik_goal',PoseStamped,queue_size=5)
 ik_goal_l_pub = rospy.Publisher('/ik_goal_l',PoseStamped,queue_size=5)
 goal_pos_pub = rospy.Publisher('vive_position', Vector3Stamped)
 goal_quat_pub = rospy.Publisher('vive_quaternion', QuaternionStamped)
 # ee_pose_goals_pub = rospy.Publisher('/relaxed_ik/ee_pose_goals', EEPoseGoals, queue_size=5)
-quit_pub = rospy.Publisher('/relaxed_ik/quit',Bool,queue_size=5)
+#quit_pub = rospy.Publisher('/relaxed_ik/quit',Bool,queue_size=5)
 
 pos_stride = 0.015
 rot_stride = 0.055
@@ -63,71 +63,6 @@ while not rospy.is_shutdown():
         position_r[2] += pos_stride
     elif key == 'z':
         position_r[2] -= pos_stride
-    elif key == '1':
-        euler = list(T.euler_from_quaternion(rotation_r))
-        euler[0] += rot_stride
-        rotation_r = T.quaternion_from_euler(euler[0],euler[1],euler[2])
-    elif key == '2':
-        euler = list(T.euler_from_quaternion(rotation_r))
-        euler[0] -= rot_stride
-        rotation_r = T.quaternion_from_euler(euler[0],euler[1],euler[2])
-    elif key == '3':
-        euler = list(T.euler_from_quaternion(rotation_r))
-        euler[1] += rot_stride
-        rotation_r = T.quaternion_from_euler(euler[0],euler[1],euler[2])
-    elif key == '4':
-        euler = list(T.euler_from_quaternion(rotation_r))
-        euler[1] -= rot_stride
-        rotation_r = T.quaternion_from_euler(euler[0],euler[1],euler[2])
-    elif key == '5':
-        euler = list(T.euler_from_quaternion(rotation_r))
-        euler[2] += rot_stride
-        rotation_r = T.quaternion_from_euler(euler[0],euler[1],euler[2])
-    elif key == '6':
-        euler = list(T.euler_from_quaternion(rotation_r))
-        euler[2] -= rot_stride
-        rotation_r = T.quaternion_from_euler(euler[0],euler[1],euler[2])
-
-    elif key == 'i':
-        position_l[0] += pos_stride # left
-    elif key == 'm':
-        position_l[0] -= pos_stride
-    elif key == 'j':
-        position_l[1] += pos_stride
-    elif key == 'l':
-        position_l[1] -= pos_stride
-    elif key == 'u':
-        position_l[2] += pos_stride
-    elif key == 'n':
-        position_l[2] -= pos_stride
-    elif key == '=':
-        euler = list(T.euler_from_quaternion(rotation_l))
-        euler[0] += rot_stride
-        rotation_l = T.quaternion_from_euler(euler[0],euler[1],euler[2])
-    elif key == '-':
-        euler = list(T.euler_from_quaternion(rotation_l))
-        euler[0] -= rot_stride
-        rotation_l = T.quaternion_from_euler(euler[0],euler[1],euler[2])
-    elif key == '0':
-        euler = list(T.euler_from_quaternion(rotation_l))
-        euler[1] += rot_stride
-        rotation_l = T.quaternion_from_euler(euler[0],euler[1],euler[2])
-    elif key == '9':
-        euler = list(T.euler_from_quaternion(rotation_l))
-        euler[1] -= rot_stride
-        rotation_l = T.quaternion_from_euler(euler[0],euler[1],euler[2])
-    elif key == '8':
-        euler = list(T.euler_from_quaternion(rotation_l))
-        euler[2] += rot_stride
-        rotation_l = T.quaternion_from_euler(euler[0],euler[1],euler[2])
-    elif key == '7':
-        euler = list(T.euler_from_quaternion(rotation_l))
-        euler[2] -= rot_stride
-        rotation_l = T.quaternion_from_euler(euler[0],euler[1],euler[2])
-    elif key == 'q':
-        q = Bool()
-        q.data = True
-        quit_pub.publish(q)
     elif key == 'c':
         rospy.signal_shutdown()
 
@@ -168,7 +103,7 @@ while not rospy.is_shutdown():
     quat_goal.quaternion.z = rotation_r[3]
     goal_quat_pub.publish(quat_goal)
 
-    ee_pose_goals = EEPoseGoals()
+    
     pose_r = Pose()
     pose_r.position.x = position_r[0]
     pose_r.position.y = position_r[1]
@@ -188,13 +123,6 @@ while not rospy.is_shutdown():
     pose_l.orientation.x = rotation_l[1]
     pose_l.orientation.y = rotation_l[2]
     pose_l.orientation.z = rotation_l[3]
-    ee_pose_goals.ee_poses.append(pose_r)
-    ee_pose_goals.ee_poses.append(pose_l)
-
-    ee_pose_goals.header.seq = seq
+  
     seq += 1
-    ee_pose_goals_pub.publish(ee_pose_goals)
 
-    q = Bool()
-    q.data = False
-    quit_pub.publish(q)

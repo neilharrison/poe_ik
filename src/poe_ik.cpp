@@ -22,8 +22,7 @@
 #include <Eigen/Eigen>
 #include <algorithm>
 
-#include "ros/ros.h"
-#include "std_msgs/String.h"
+
 
 #include <sstream>
 
@@ -32,8 +31,7 @@ using Eigen::VectorXd;
 using Eigen::Matrix3d;
 using Eigen::Matrix4d;
 using Eigen::Vector3d;
-using std::cout;
-using std::endl;
+
 
 
 // #define NUMB_OF_LEGS 4
@@ -157,7 +155,7 @@ using std::endl;
 #define LEG_II_INIT_CONF 0.0, 1.0015, 1.0830, 0.0, -1.0830, -1.0015
 #define LEG_III_INIT_CONF 0.0, -1.0015, 1.0830, 0.0, -1.0830, 1.0015
 
-#define LEG_UR5_INIT_CONF 0.0,-M_PI_2, 0.0, 0.0, M_PI_2, 0.0
+#define LEG_UR5_INIT_CONF 0.0,-M_PI_2, M_PI_2, 0.0, M_PI_2, 0.0
 
 // starting trajectory at point 777
 //#define LEG_11_INIT_CONF -0.4365, -0.5948, -0.5613, 0.3664, -0.2922, -0.7492
@@ -215,6 +213,8 @@ VectorXd current_joint_angles_III((VectorXd(6)<< LEG_III_INIT_CONF).finished());
 
 VectorXd current_joint_angles_UR5((VectorXd(6)<< LEG_UR5_INIT_CONF).finished());
 
+
+
 int ToString(char *dest, const char *fmt, double x, int count )
 {
 	int ret = snprintf(dest, count, fmt, x );
@@ -262,7 +262,7 @@ void Initialize()
 	joint_angles_II.row(0) = current_joint_angles_II;
 	joint_angles_III.row(0) = current_joint_angles_III;
 
-
+	/*
 	std::string line;
 	std::ifstream ftraj;
 
@@ -299,7 +299,7 @@ void Initialize()
 				test_trajectory(POINT_CNT + i,j) = test_trajectory(POINT_CNT - i - 1,j);
 		POINT_CNT += POINT_CNT;
 	}
-
+	*/
 }
 
 MatrixXd PreCalcDHparams(MatrixXd &dh_params)
@@ -818,7 +818,8 @@ void iksolve(Matrix4d &Ton_new, int &n_it) {
 		//error = max_tcp_error;
 		n_it++;
 	}
-	}
+}
+
 
 #ifdef POE_BLOCK
 
@@ -914,27 +915,17 @@ int main(int argc, char **argv)
 		Ton = fkine((*(VERNE.Leg_it))->legParam->extDenHart, (*(VERNE.Leg_it))->legParam->baseFrame, (*(VERNE.Leg_it))->legParam->toolFrame, (*(VERNE.Leg_it))->jointAngles);
 		(*(VERNE.Leg_it))->Ton = Ton;
 	}
+	homeTon = Ton;
+	cout<<"Home\n"<<homeTon<<endl;
+	ros::init(argc, argv, "poe_ik_node");
+	//ros::NodeHandle n;
 
-	// ros::init(argc, argv, "poe_ik_node");
-	// ros::NodeHandle n;
+	//ros::Publisher joint_angles_pub = n.advertise<std_msgs::Float64MultiArray>("/arm/joint_group_position_controller/command", 1000);
+	//ros::Rate loop_rate(10);
 
-	// ros::Publisher joint_angles_pub = n.advertise<std_msgs::String>("joint_angles", 1000);
-	// ros::Rate loop_rate(10);
-	// int count = 0;
-  	// //while (ros::ok())
- 	// {
-	// 	std_msgs::String msg;
-
-    // 	std::stringstream ss;
-    // 	ss << "hello world " << count;
-    // 	msg.data = ss.str();
-    // 	ROS_INFO("%s", msg.data.c_str());
-
-	// 	joint_angles_pub.publish(msg);
-	// 	ros::spinOnce();
-
-    // 	loop_rate.sleep();
-   	// 	++count;
+	//ros::Subscriber sub = n.subscribe("/ik_goal", 1000, ikCallback);
+	SubscribeAndPublish subpub;
+	ros::spin();
 
 
 	// }
@@ -960,6 +951,11 @@ int main(int argc, char **argv)
     0.0000   , 0.0000 ,  -1.0000  ,  0.0396,
          0     ,    0      ,   0 ,   1.0000).finished();
 		cout<<Ton_new<<endl;
+
+		Vector4d quat = (Vector4d()<<0,0,0,1).finished();
+		Vector3d pose = (Vector3d()<<0.0856,-0.1091,0.0396).finished();
+
+		Ton_new = transformFromPose(quat, pose);
 
 		iksolve(Ton_new,n_it);
 
