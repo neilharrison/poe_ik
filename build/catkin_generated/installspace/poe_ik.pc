@@ -1,8 +1,0 @@
-prefix=/usr/local
-
-Name: poe_ik
-Description: Description of poe_ik
-Version: 0.0.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib -lpoe_ik
-Requires: roscpp rospy std_msgs
