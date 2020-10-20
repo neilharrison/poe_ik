@@ -23,9 +23,6 @@
 #include <algorithm>
 
 
-
-#include <sstream>
-
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using Eigen::Matrix3d;
@@ -36,8 +33,10 @@ using Eigen::Vector3d;
 
 // #define NUMB_OF_LEGS 4
 // #define NUMB_OF_JOINTS 23
-#define NUMB_OF_LEGS 1
-#define NUMB_OF_JOINTS 6
+// #define NUMB_OF_LEGS 4
+// #define NUMB_OF_JOINTS 22
+#define NUMB_OF_LEGS 2
+#define NUMB_OF_JOINTS 12
 
 // Denavit-Hartenberg parameters are stored in (n, 7) matrices,
 // where rows are structured in this manner:
@@ -53,39 +52,23 @@ using Eigen::Vector3d;
 // offset: joint coordinate offset
 
 // #define PATH_MATRIX    1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, \
-// 					   1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, \
-// 					   0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, \
-// 					   0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
-#define PATH_MATRIX 	1.0,1.0,1.0,1.0,1.0,1.0
-					
+// 					   	  1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, \
+// 					      0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, \
+// 					      0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
 
-#define DH_PARAM_11    0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0,        \
-					  -M_PI_2, 0.0, 0.0, 0.08, 0.0, 1.0, 0.0,    \
-					  -M_PI_2, 0.0, 0.0, 0.0, 0.0, 1.0, -M_PI_2, \
-					   M_PI_2, 0.0, 0.0, 0.85, 0.0, 1.0, 0.0,    \
-					   M_PI_2, 0.0, 0.0, 0.0, 0.0, 1.0, -M_PI_2, \
-					   M_PI_2, 0.0, 0.0, 0.13, 0.0, 1.0, 0.0
+#define PATH_MATRIX 	1.0,1.0,1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0, \
+						0.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0
 
-#define DH_PARAM_12   0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0,        \
-					 -M_PI_2, 0.0, 0.0, -0.08, 0.0, 1.0, 0.0,   \
-					 -M_PI_2, 0.0, 0.0, 0.0, 0.0, 1.0, -M_PI_2, \
-					  M_PI_2, 0.0, 0.0, 0.85, 0.0, 1.0, 0.0,    \
-					  M_PI_2, 0.0, 0.0, 0.0, 0.0, 1.0, -M_PI_2, \
-					  M_PI_2, 0.0, 0.0, -0.13, 0.0, 1.0, 0.0
+//#define PATH_MATRIX 	1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0, \
+						1.0,1.0,1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0, \
+						1.0,1.0,1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0, \
+						1.0,1.0,1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0
 
-#define DH_PARAM_II   0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0,       \
-					  0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,       \
-					 -M_PI_2, 0.0, 0.0, 0.0, 0.0, 1.0, M_PI_2, \
-					  M_PI_2, 0.0, 0.0, 0.95, 0.0, 1.0, M_PI,  \
-					  M_PI_2, 0.0, 0.0, 0.0, 0.0, 1.0, M_PI_2, \
-					  M_PI_2, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0
 
-#define DH_PARAM_III   0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0,       \
-					   0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,       \
-					  -M_PI_2, 0.0, 0.0, 0.0, 0.0, 1.0, M_PI_2, \
-					   M_PI_2, 0.0, 0.0, 0.95, 0.0, 1.0, M_PI,  \
-					   M_PI_2, 0.0, 0.0, 0.0, 0.0, 1.0, M_PI_2, \
-					   M_PI_2, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0
+//#define PATH_MATRIX 	1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0, \
+						1.0,1.0,1.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0
+
+#define WRIST_L 0.100205
 
 #define DH_PARAM_UR5   M_PI_2, 0.0,   0.0, 0.089159, 0.0, 0.0, 0.0,       \
 					   0.0,  -0.425,  0.0, 0.0,      0.0, 0.0, 0.0,       \
@@ -93,51 +76,20 @@ using Eigen::Vector3d;
 					   M_PI_2, 0.0,   0.0, 0.10915,  0.0, 0.0, 0.0,  \
 					  -M_PI_2, 0.0,   0.0, 0.09465,  0.0, 0.0, 0.0, \
 					   0.0,    0.0,   0.0, 0.0823,   0.0, 0.0, 0.0
+					  
 
+
+
+#define DH_PARAM_WRIST   -M_PI_2,  0.0,  0.0,  0.0,	     0.0, 0.0, 0.0,   \
+						  M_PI_4,  0.0,  0.0,  WRIST_L,  0.0, 0.0, -M_PI_2,\
+						 -M_PI_2,  0.0,  0.0, -WRIST_L,  0.0, 0.0, M_PI_2, \
+						  0.0, 	   0.0,  0.0,  0.0,  	 0.0, 0.0, 0.0
 
 //--------------------------------------------------------------
 // Baase and (initial) tool transformation matrices for each leg
 //--------------------------------------------------------------
 
-#define BASE_11     1.0, 0.0, 0.0, 0.55, \
-					0.0, 1.0, 0.0, 0.0,   \
-					0.0, 0.0, 1.0, 1.2859, \
-					0.0, 0.0, 0.0, 1.0
 
-#define TOOL_11		1.0, 0.0, 0.0, -0.23,  \
-					0.0, 0.0, 1.0, 0.0,  \
-					0.0, -1.0, 0.0, 0.0,  \
-					0.0, 0.0, 0.0, 1.0
-
-#define BASE_12		1.0, 0.0, 0.0, 0.55, \
-					0.0, 1.0, 0.0, 0.0,   \
-					0.0, 0.0, 1.0, 1.2859, \
-					0.0, 0.0, 0.0, 1.0
-
-#define TOOL_12		1.0, 0.0, 0.0, -0.23,  \
-					0.0, 0.0, 1.0, 0.0,  \
-					0.0, -1.0, 0.0, 0.0,  \
-					0.0, 0.0, 0.0, 1.0
-
-#define BASE_II		1.0, 0.0, 0.0, -0.285,  \
-					0.0, 1.0, 0.0, -0.565,  \
-					0.0, 0.0, 1.0, 1.3392,   \
-					0.0, 0.0, 0.0, 1.0
-
-#define TOOL_II		1.0, 0.0, 0.0, 0.045, \
-					0.0, 1.0, 0.0, 0.19,  \
-					0.0, 0.0, 1.0, 0.0,  \
-					0.0, 0.0, 0.0, 1.0
-
-#define BASE_III	1.0, 0.0, 0.0, -0.285,  \
-					0.0, 1.0, 0.0, 0.565,  \
-					0.0, 0.0, 1.0, 1.3392,   \
-					0.0, 0.0, 0.0, 1.0
-
-#define TOOL_III	1.0, 0.0, 0.0, 0.045, \
-					0.0, 1.0, 0.0, -0.19,  \
-					0.0, 0.0, 1.0, 0.0,  \
-					0.0, 0.0, 0.0, 1.0
 
 #define BASE_UR5	1.0, 0.0, 0.0, 0.0,  \
 					0.0, 1.0, 0.0, 0.0,  \
@@ -149,13 +101,72 @@ using Eigen::Vector3d;
 					0.0, 0.0, 1.0, 0.0,  \
 					0.0, 0.0, 0.0, 1.0
 
-// Initial joint values for each leg
-#define LEG_11_INIT_CONF 0.0, -1.1841, 0.0589, 0.0, 0.0589, -1.1841
-#define LEG_12_INIT_CONF 0.0, -1.1841, -0.0589, 0.0, -0.0589, -1.1841
-#define LEG_II_INIT_CONF 0.0, 1.0015, 1.0830, 0.0, -1.0830, -1.0015
-#define LEG_III_INIT_CONF 0.0, -1.0015, 1.0830, 0.0, -1.0830, 1.0015
+#define TOOL_UR5_1	1.0, 0.0, 0.0, -0.30, \
+					0.0, 1.0, 0.0, 0.0,  \
+					0.0, 0.0, 1.0, 0.0,  \
+					0.0, 0.0, 0.0, 1.0
 
-#define LEG_UR5_INIT_CONF 0.0,-M_PI_2, M_PI_2, 0.0, M_PI_2, 0.0
+#define TOOL_UR5_2	1.0, 0.0, 0.0, 0.30, \
+					0.0, 1.0, 0.0, 0.0,  \
+					0.0, 0.0, 1.0, 0.0,  \
+					0.0, 0.0, 0.0, 1.0
+
+#define BASE_UR5_1	1.0, 0.0, 0.0, 0.0, \
+					0.0, 1.0, 0.0, -0.30,  \
+					0.0, 0.0, 1.0, 0.0,  \
+					0.0, 0.0, 0.0, 1.0
+
+#define BASE_UR5_2	1.0, 0.0, 0.0, 0.0, \
+					0.0, 1.0, 0.0, 0.30,  \
+					0.0, 0.0, 1.0, 0.0,  \
+					0.0, 0.0, 0.0, 1.0
+
+#define BASE_WRIST_A	0.0, 1.0, 0.0, 0.0,  \
+						0.0, 0.0, 1.0, 0.0,  \
+						1.0, 0.0, 0.0, 0.0,   \
+						0.0, 0.0, 0.0, 1.0				
+
+#define BASE_WRIST_B	0.0, 0.0, -1.0, 0.0,  \
+						0.0, 1.0, 0.0, 0.0,  \
+						1.0, 0.0, 0.0, 0.0,   \
+						0.0, 0.0, 0.0, 1.0		
+
+#define BASE_WRIST_C	0.0, -1.0, 0.0, 0.0,  \
+						0.0, 0.0, -1.0, 0.0,  \
+						1.0, 0.0, 0.0, 0.0,   \
+						0.0, 0.0, 0.0, 1.0		
+
+#define BASE_WRIST_D	0.0, 0.0, 1.0, 0.0,  \
+						0.0, -1.0, 0.0, 0.0,  \
+						1.0, 0.0, 0.0, 0.0,   \
+						0.0, 0.0, 0.0, 1.0		
+
+#define TOOL_WRIST_A	1.0, 0.0, 0.0, 0.0, \
+					0.0, 1.0, 0.0, 0.0,  \
+					0.0, 0.0, 1.0, 0.0,  \
+					0.0, 0.0, 0.0, 1.0		
+
+#define TOOL_WRIST_B	0.0, 0.0, -1.0, 0.0,  \
+						0.0, 1.0, 0.0, 0.0,  \
+						1.0, 0.0, 0.0, 0.0,   \
+						0.0, 0.0, 0.0, 1.0		
+
+#define TOOL_WRIST_C	-1.0, 0.0, 0.0, 0.0, \
+						0.0, 1.0, 0.0, 0.0,  \
+						0.0, 0.0, -1.0, 0.0,  \
+						0.0, 0.0, 0.0, 1.0	
+
+#define TOOL_WRIST_D	0.0, 0.0, 1.0, 0.0, \
+						0.0, 1.0, 0.0, 0.0,  \
+						-1.0, 0.0, 0.0, 0.0,  \
+						0.0, 0.0, 0.0, 1.0				
+// Initial joint values for each leg
+
+#define LEG_UR5_INIT_CONF 0.0,-M_PI_2, M_PI_2, 0.0, M_PI_2, 0.0 
+#define LEG_A_INIT_CONF -0.349065850398866  ,-0.236758131026118 , -0.236758131026118 , -1.221730476396031
+#define LEG_B_INIT_CONF -0.174532925199433  , 0.056784958933645  , 0.056784958933645  ,-1.396263401595464
+#define LEG_C_INIT_CONF -0.456538591773544  , 0.236758134399792  , 0.236758134399792  ,-1.114257735021353
+#define LEG_D_INIT_CONF -0.612006541456378  , -0.056784960344775  , -0.056784960344775  , -0.958789785338519
 
 // starting trajectory at point 777
 //#define LEG_11_INIT_CONF -0.4365, -0.5948, -0.5613, 0.3664, -0.2922, -0.7492
@@ -182,36 +193,38 @@ MatrixXd joint_angles_III(MatrixXd::Zero(3500,6));
 
 
 // Create matrices for DH parameters for each leg
-MatrixXd DH_11((MatrixXd(6,7)<<DH_PARAM_11).finished());
-MatrixXd DH_12((MatrixXd(6,7)<<DH_PARAM_12).finished());
-MatrixXd DH_II((MatrixXd(6,7)<<DH_PARAM_II).finished());
-MatrixXd DH_III((MatrixXd(6,7)<<DH_PARAM_III).finished());
 
 MatrixXd DH_UR5((MatrixXd(6,7)<<DH_PARAM_UR5).finished());
+MatrixXd DH_Wrist((MatrixXd(4,7)<<DH_PARAM_WRIST).finished());
 
 
 
 // Base and Tool transformation for each leg
-Matrix4d Base_11((Matrix4d()<<BASE_11).finished());
-Matrix4d Tool_11((Matrix4d()<<TOOL_11).finished());
-Matrix4d Base_12((Matrix4d()<<BASE_12).finished());
-Matrix4d Tool_12((Matrix4d()<<TOOL_12).finished());
-Matrix4d Base_II((Matrix4d()<<BASE_II).finished());
-Matrix4d Tool_II((Matrix4d()<<TOOL_II).finished());
-Matrix4d Base_III((Matrix4d()<<BASE_III).finished());
-Matrix4d Tool_III((Matrix4d()<<TOOL_III).finished());
-
 Matrix4d Base_UR5((Matrix4d()<<BASE_UR5).finished());
 Matrix4d Tool_UR5((Matrix4d()<<TOOL_UR5).finished());
 
+Matrix4d Base_UR5_1((Matrix4d()<<BASE_UR5_1).finished());
+Matrix4d Base_UR5_2((Matrix4d()<<BASE_UR5_2).finished());
+Matrix4d Tool_UR5_1((Matrix4d()<<TOOL_UR5_1).finished());
+Matrix4d Tool_UR5_2((Matrix4d()<<TOOL_UR5_2).finished());
 
+Matrix4d Base_Wrist_A((Matrix4d()<<BASE_WRIST_A).finished());
+Matrix4d Base_Wrist_B((Matrix4d()<<BASE_WRIST_B).finished());
+Matrix4d Base_Wrist_C((Matrix4d()<<BASE_WRIST_C).finished());
+Matrix4d Base_Wrist_D((Matrix4d()<<BASE_WRIST_D).finished());
+Matrix4d Tool_Wrist_A((Matrix4d()<<TOOL_WRIST_A).finished());
+Matrix4d Tool_Wrist_B((Matrix4d()<<TOOL_WRIST_B).finished());
+Matrix4d Tool_Wrist_C((Matrix4d()<<TOOL_WRIST_C).finished());
+Matrix4d Tool_Wrist_D((Matrix4d()<<TOOL_WRIST_D).finished());
 // Initial configuration
-VectorXd current_joint_angles_11((VectorXd(6)<< LEG_11_INIT_CONF).finished());
-VectorXd current_joint_angles_12((VectorXd(6)<< LEG_12_INIT_CONF).finished());
-VectorXd current_joint_angles_II((VectorXd(6)<< LEG_II_INIT_CONF).finished());
-VectorXd current_joint_angles_III((VectorXd(6)<< LEG_III_INIT_CONF).finished());
+
 
 VectorXd current_joint_angles_UR5((VectorXd(6)<< LEG_UR5_INIT_CONF).finished());
+VectorXd current_joint_angles_A((VectorXd(4)<< LEG_A_INIT_CONF).finished());
+VectorXd current_joint_angles_B((VectorXd(4)<< LEG_B_INIT_CONF).finished());
+VectorXd current_joint_angles_C((VectorXd(4)<< LEG_C_INIT_CONF).finished());
+VectorXd current_joint_angles_D((VectorXd(4)<< LEG_D_INIT_CONF).finished());
+
 
 
 
@@ -257,10 +270,10 @@ void saveTestData (const char *fileName, MatrixXd &data)
 void Initialize()
 {
 	// store initial joint angles
-	joint_angles_11.row(0) = current_joint_angles_11;
-	joint_angles_12.row(0) = current_joint_angles_12;
-	joint_angles_II.row(0) = current_joint_angles_II;
-	joint_angles_III.row(0) = current_joint_angles_III;
+	//joint_angles_11.row(0) = current_joint_angles_11;
+	//joint_angles_12.row(0) = current_joint_angles_12;
+	//joint_angles_II.row(0) = current_joint_angles_II;
+	//joint_angles_III.row(0) = current_joint_angles_III;
 
 	/*
 	std::string line;
@@ -304,8 +317,8 @@ void Initialize()
 
 MatrixXd PreCalcDHparams(MatrixXd &dh_params)
 {
-	MatrixXd dh_precalc(MatrixXd::Zero(6,8));
-	for(int i = 0; i < 6; i++)  {
+	MatrixXd dh_precalc(MatrixXd::Zero(dh_params.rows(),8));
+	for(int i = 0; i < dh_params.rows(); i++)  {
 		dh_precalc(i,0) = cos(dh_params(i,0));  // calculate cos(alpha)
 		dh_precalc(i,1) = sin(dh_params(i,0));  // calculate sin(alpha)
 		for(int j = 2; j < 8; j++)  
@@ -423,21 +436,7 @@ MatrixXd pinv(MatrixXd M)
 // }
 
 
-Matrix4d fkine(MatrixXd &dh_param, Matrix4d &base_frame, Matrix4d &tool_frame, VectorXd &current_joint_angles)
-{
-	Matrix4d base_tool_transform(Matrix4d::Zero());
-	Matrix4d temp_matrix(Matrix4d::Zero());
-	temp_matrix = base_frame;
-	
-	for(int i = 0; i < 6; i++)  { //6 should be variable? (number of links in leg?)
-		//base_tool_transform = temp_matrix * linkTransformMod(dh_param.row(i), current_joint_angles(i));
-		base_tool_transform = temp_matrix * linkTransform(dh_param.row(i), current_joint_angles(i));
-		temp_matrix = base_tool_transform;
-	}
-	base_tool_transform = temp_matrix * tool_frame;
-	//cout<<base_tool_transform<<endl;
-	return base_tool_transform;
-}
+
 
 MatrixXd BstarS(MatrixXd &dh, Matrix4d &baseFrame, VectorXd &q, int &leg_index)
 {
@@ -446,20 +445,19 @@ MatrixXd BstarS(MatrixXd &dh, Matrix4d &baseFrame, VectorXd &q, int &leg_index)
 	// Calculates B*S and replace as "B" matrix 
 	// Vectors are built up as row vectors
 	// B need to be transposed before being used
-	MatrixXd B(MatrixXd::Zero(VERNE.pathMatrix.cols(), dof));
+	MatrixXd B(MatrixXd::Zero(VERNE.pathMatrix.cols(), 6));
 	VectorXd s(VectorXd::Zero(6)); // Twist local coordinates
 	Matrix4d Toi = baseFrame;
 	
 	int i = 0;
 	//SVIterd j_it;
 	//for (j_it.Begin(VERNE.pathMatrix.row(leg_index); !j_it.AtEnd(); j_it.Inc()) {
-	Eigen::SparseVector<double> pm_row= VERNE.pathMatrix.row(leg_index);
+	Eigen::SparseVector<double> pm_row = VERNE.pathMatrix.row(leg_index);
 	
 	for (Eigen::SparseVector<double>::InnerIterator it(pm_row);it;++it){
 		//cout<<it.index()<<endl;
 		//cout<<dq_all(it.index())<<endl;		
 		//Toi = Toi * linkTransformMod(dh.row(i), q(i));
-		
 		s(2) = 1.0 - dh(i,5);
 		s(5) = dh(i,5);
 		if (i ==0) {
@@ -478,13 +476,20 @@ MatrixXd BstarS(MatrixXd &dh, Matrix4d &baseFrame, VectorXd &q, int &leg_index)
 	return B.transpose(); //*S;
 }
 
-VectorXd poseDiff(Eigen::Ref<Eigen::Matrix3d> Rnew, Eigen::Ref<Eigen::Matrix3d> R, Eigen::Ref<Eigen::Vector3d> xyz_new, Eigen::Ref<Eigen::Vector3d> xyz)
+VectorXd poseDiff(Matrix4d &Ton_new, Matrix4d &Ton)
 {
-	Matrix3d Rtrans = R.transpose();
+		// extract rotation matrices
+	Eigen::Ref<Matrix3d> Ron_new = Ton_new.block(0,0, 3, 3);   
+	Eigen::Ref<Matrix3d> Ron = Ton.block(0,0, 3, 3);
+	
+	Eigen::Ref<Vector3d> xyz = Ton.col(3).segment(0,3);
+	Eigen::Ref<Vector3d> xyz_new = Ton_new.col(3).segment(0,3);
+
+	Matrix3d Rtrans = Ron.transpose();
 	//cout<<R<<endl;
 	//cout<<xyz<<endl;
 	// Calculate inv(Ton)*Ton_new
-	Matrix3d Rtot = Rtrans * Rnew;
+	Matrix3d Rtot = Rtrans * Ron_new;
 	Vector3d xyz_tot = xyz_new - xyz;
 	xyz_tot = Rtrans * xyz_tot;
 
@@ -550,7 +555,7 @@ VectorXd poseDiff(Eigen::Ref<Eigen::Matrix3d> Rnew, Eigen::Ref<Eigen::Matrix3d> 
 }
 
 // Calculation of Body Manipulator Jacobian
-MatrixXd bm_jacobian(MatrixXd &dh, Matrix4d &baseFrame, VectorXd &q, Eigen::Ref<Eigen::Matrix3d> &Ron, Eigen::Ref<Eigen::Vector3d> &xyz)
+/*MatrixXd bm_jacobian(MatrixXd &dh, Matrix4d &baseFrame, VectorXd &q, Eigen::Ref<Eigen::Matrix3d> &Ron, Eigen::Ref<Eigen::Vector3d> &xyz)
 {
 	Matrix3d Ron_trans = Ron.transpose();
 	int dof = dh.rows();
@@ -601,7 +606,8 @@ MatrixXd bm_jacobian(MatrixXd &dh, Matrix4d &baseFrame, VectorXd &q, Eigen::Ref<
 
 	return J.transpose();
 }
-
+*/
+/*
 VectorXd ikinVERNE_POE(MatrixXd &dh, Matrix4d &baseFrame, Eigen::Ref<Eigen::Matrix3d> &Ron_new, Eigen::Ref<Eigen::Matrix3d> &Ron, Eigen::Ref<Eigen::Vector3d> &xyz_new, Eigen::Ref<Eigen::Vector3d> &xyz, VectorXd &q)
 {
 	Matrix3d Ron_trans = Ron.transpose();
@@ -701,7 +707,9 @@ VectorXd ikinVERNE_POE(MatrixXd &dh, Matrix4d &baseFrame, Eigen::Ref<Eigen::Matr
 	
  	return D;
 }
+*/
 
+/*
 void iksolve(Matrix4d &Ton_new, int &n_it) { 
 
 	MatrixXd dh;
@@ -752,7 +760,7 @@ void iksolve(Matrix4d &Ton_new, int &n_it) {
 
 			changeSubMatd(A, AdjInvH(Ton), leg_index*6, leg_index*6, 6, 6);
 							
-			changeSubVecd(D, poseDiff(Ron_new, Ron, xyz_new, xyz), leg_index*6, 6);
+			//changeSubVecd(D, poseDiff(Ron_new, Ron, xyz_new, xyz), leg_index*6, 6);
 			
 			leg_index++;
 		}
@@ -766,7 +774,8 @@ void iksolve(Matrix4d &Ton_new, int &n_it) {
 		dq_all = J.bdcSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(D);
 		
 		//cout<<"dq\n"<<dq_all<<endl;
-		
+		//cout<<"dq - QR\n"<<J.colPivHouseholderQr().solve(D)<<endl;
+
 		leg_index = 0;
 		
 		// update joint angles for each leg
@@ -786,11 +795,11 @@ void iksolve(Matrix4d &Ton_new, int &n_it) {
 			}
 
 			// update kinematics
+			Ton = (*(VERNE.Leg_it))->fkine();
 			
-			Ton = fkine((*(VERNE.Leg_it))->legParam->extDenHart, (*(VERNE.Leg_it))->legParam->baseFrame, (*(VERNE.Leg_it))->legParam->toolFrame, (*(VERNE.Leg_it))->jointAngles);
-			(*(VERNE.Leg_it))->Ton = Ton;
 			//cout<<Ton<<endl;
-			changeSubVecd(D, poseDiff(Ron_new, Ron, xyz_new, xyz), leg_index*6, 6);
+
+		//changeSubVecd(D, poseDiff(Ron_new, Ron, xyz_new, xyz), leg_index*6, 6);
 
 			// evaluate max tcp calculation error across all legs
 			//tr2rpy(rpy, Ton);
@@ -805,7 +814,7 @@ void iksolve(Matrix4d &Ton_new, int &n_it) {
 		}
 		/*error = dq_all[0];
 		for(int i = 1; i < D.Elts(); i++)
-			error = max(error, dq_all[i]);*/
+			error = max(error, dq_all[i]);
 
 		if (n_it>MAX_ITERATION_NUMBER)
 			{
@@ -819,6 +828,7 @@ void iksolve(Matrix4d &Ton_new, int &n_it) {
 		n_it++;
 	}
 }
+*/
 
 
 #ifdef POE_BLOCK
@@ -827,38 +837,96 @@ int main(int argc, char **argv)
 {
 	
 	//Setting up legs - add to pkm(VERNE) class
-	t_kinParam leg_11, leg_12, leg_II, leg_III;
 
-	// leg_11.extDenHart = PreCalcDHparams(DH_11);
-	// leg_11.baseFrame = Base_11;
-	// leg_11.toolFrame = Tool_11;
-	// //PKM.push_back(new CSerialChain(&leg_11, current_joint_angles_11));
-	// VERNE.Leg.push_back(new CSerialChain(&leg_11, current_joint_angles_11));
+	t_kinParam Base,leg_UR5, leg_UR5_1, leg_UR5_2,leg_A,leg_B,leg_C,leg_D,end_ef1;
 
-	// leg_12.extDenHart = PreCalcDHparams(DH_12);
-	// leg_12.baseFrame = Base_12;
-	// leg_12.toolFrame = Tool_12;
-	// //PKM.push_back(new CSerialChain(&leg_12, current_joint_angles_12));
-	// VERNE.Leg.push_back(new CSerialChain(&leg_12, current_joint_angles_12));
+	//Base Leg is located at the identity - for connecting legs to
+	Base.extDenHart = MatrixXd::Zero(1,8);
+	Base.extDenHart(0) = 1; //pre calcing cos(0) = 1
+	Base.baseFrame = Matrix4d::Identity();
+	Base.toolFrame = Matrix4d::Identity();
+	VERNE.Leg_Map.insert(std::make_pair("Base",new CSerialChain(&Base, VectorXd::Zero(1))));
+	VERNE.Leg_Map["Base"]->children.push_back("UR5_1");	
+	VERNE.Leg_Map["Base"]->children.push_back("UR5_2");	
+	//VERNE.Leg_Map["Base"]->children.push_back("UR5");	
+	//cout<<VERNE.Leg_Map["Base"]->fkine()<<endl;
 
-	// leg_II.extDenHart = PreCalcDHparams(DH_II);
-	// leg_II.baseFrame = Base_II;
-	// leg_II.toolFrame = Tool_II;
-	// //PKM.push_back(new CSerialChain(&leg_II, current_joint_angles_II));
-	// VERNE.Leg.push_back(new CSerialChain(&leg_II, current_joint_angles_II));
-	// leg_III.extDenHart = PreCalcDHparams(DH_III);
-	// leg_III.baseFrame = Base_III;
-	// leg_III.toolFrame = Tool_III;
-	// //PKM.push_back(new CSerialChain(&leg_III, current_joint_angles_III));
-	// VERNE.Leg.push_back(new CSerialChain(&leg_III, current_joint_angles_III));
+	//cout<<VERNE.Leg_Map["Base"]->Ton<<endl;
 
-	t_kinParam leg_UR5;
+	leg_UR5_1.extDenHart = PreCalcDHparams(DH_UR5);
+	leg_UR5_1.baseFrame = Base_UR5_1;
+	leg_UR5_1.toolFrame = Tool_UR5_1;
+	VERNE.Leg.push_back(new CSerialChain(&leg_UR5_1, current_joint_angles_UR5));
+	VERNE.Leg_Map.insert(std::make_pair("UR5_1",new CSerialChain(&leg_UR5_1, current_joint_angles_UR5)));
 
-	leg_UR5.extDenHart = PreCalcDHparams(DH_UR5);
-	leg_UR5.baseFrame = Base_UR5;
-	leg_UR5.toolFrame = Tool_UR5;
-	// //PKM.push_back(new CSerialChain(&leg_11, current_joint_angles_11));
-	VERNE.Leg.push_back(new CSerialChain(&leg_UR5, current_joint_angles_UR5));
+	leg_UR5_2.extDenHart = PreCalcDHparams(DH_UR5);
+	leg_UR5_2.baseFrame = Base_UR5_2;
+	leg_UR5_2.toolFrame = Tool_UR5_2;
+	VERNE.Leg.push_back(new CSerialChain(&leg_UR5_2, current_joint_angles_UR5));
+	VERNE.Leg_Map.insert(std::make_pair("UR5_2",new CSerialChain(&leg_UR5_2, current_joint_angles_UR5)));
+
+	//VERNE.Leg_Map["UR5"]->parent.push_back("Base");
+	VERNE.Leg_Map["UR5_1"]->parent.push_back("Base");
+	VERNE.Leg_Map["UR5_1"]->children.push_back("End_Ef1");
+
+	VERNE.Leg_Map["UR5_2"]->children.push_back("End_Ef1");
+	VERNE.Leg_Map["UR5_2"]->parent.push_back("Base");
+	//VERNE.Leg_Map["UR5"]->children.push_back("WristA");
+	//VERNE.Leg_Map["UR5"]->children.push_back("WristB");
+	// VERNE.Leg_Map["UR5"]->children.push_back("WristC");
+	// VERNE.Leg_Map["UR5"]->children.push_back("WristD");
+
+	//cout<<VERNE.Leg_Map["UR5"]->children[0]<<endl;
+	//cout<<VERNE.Leg_Map["UR5"]->fkine()*VERNE.Leg_Map["Base"]->fkine()<<endl;
+	
+	// leg_A.extDenHart = PreCalcDHparams(DH_Wrist);
+	// leg_A.baseFrame = Base_Wrist_A;
+	// leg_A.toolFrame = Tool_Wrist_A;
+	// VERNE.Leg.push_back(new CSerialChain(&leg_A, current_joint_angles_A));
+	// VERNE.Leg_Map.insert(std::make_pair("WristA",new CSerialChain(&leg_A, current_joint_angles_A)));
+	// VERNE.Leg_Map["WristA"]->parent.push_back("UR5");
+	// VERNE.Leg_Map["WristA"]->children.push_back("End_Ef1");
+
+	// leg_B.extDenHart = PreCalcDHparams(DH_Wrist);
+	// leg_B.baseFrame = Base_Wrist_B;
+	// leg_B.toolFrame = Tool_Wrist_B;
+	// VERNE.Leg.push_back(new CSerialChain(&leg_B, current_joint_angles_B));
+	// VERNE.Leg_Map.insert(std::make_pair("WristB",new CSerialChain(&leg_B, current_joint_angles_B)));
+	// VERNE.Leg_Map["WristB"]->parent.push_back("UR5");
+	// VERNE.Leg_Map["WristB"]->children.push_back("End_Ef1");
+
+
+	// leg_C.extDenHart = PreCalcDHparams(DH_Wrist);
+	// leg_C.baseFrame = Base_Wrist_C;
+	// leg_C.toolFrame = Tool_Wrist_C;
+	// VERNE.Leg.push_back(new CSerialChain(&leg_C, current_joint_angles_C));
+	// VERNE.Leg_Map.insert(std::make_pair("WristC",new CSerialChain(&leg_C, current_joint_angles_C)));
+	// VERNE.Leg_Map["WristC"]->parent.push_back("UR5");
+	// VERNE.Leg_Map["WristC"]->children.push_back("End_Ef1");
+
+
+	// leg_D.extDenHart = PreCalcDHparams(DH_Wrist);
+	// leg_D.baseFrame = Base_Wrist_D;
+	// leg_D.toolFrame = Tool_Wrist_D;
+	// VERNE.Leg.push_back(new CSerialChain(&leg_D, current_joint_angles_D));
+	// VERNE.Leg_Map.insert(std::make_pair("WristD",new CSerialChain(&leg_D, current_joint_angles_D)));
+	// VERNE.Leg_Map["WristD"]->parent.push_back("UR5");
+	// VERNE.Leg_Map["WristD"]->children.push_back("End_Ef1");
+
+	end_ef1.extDenHart = MatrixXd::Zero(1,8);
+	end_ef1.extDenHart(0) = 1; //pre calcing cos(0) = 1
+	end_ef1.baseFrame = Matrix4d::Identity();
+	end_ef1.toolFrame = Matrix4d::Identity();
+	VERNE.Leg_Map.insert(std::make_pair("End_Ef1",new CSerialChain(&Base, VectorXd::Zero(1))));
+	//VERNE.Leg_Map["End_Ef1"]->parent.push_back("WristA");
+	//VERNE.Leg_Map["End_Ef1"]->parent.push_back("WristB");
+	//VERNE.Leg_Map["End_Ef1"]->parent.push_back("WristC");
+	//VERNE.Leg_Map["End_Ef1"]->parent.push_back("WristD");
+	VERNE.Leg_Map["End_Ef1"]->parent.push_back("UR5_1");
+
+	VERNE.Leg_Map["End_Ef1"]->parent.push_back("UR5_2");
+
+	VERNE.End_effectors.push_back("End_Ef1");
 
 
 	//path matrix to sparse matrix inside pkm class
@@ -872,6 +940,7 @@ int main(int argc, char **argv)
 		 }
 	 }
 
+	
 
 	int max_it = MAX_ITERATION_NUMBER;
 	Initialize();
@@ -879,8 +948,8 @@ int main(int argc, char **argv)
 	Matrix4d Ton_new(Matrix4d::Identity());
 	Matrix4d Ton(Matrix4d::Identity());
 	// extract rotation matrices
-	Eigen::Ref<Matrix3d> Ron_new = Ton_new.block(0,0, 3, 3);   
-	Eigen::Ref<Matrix3d> Ron = Ton.block(0,0, 3, 3);
+	Eigen::Ref<Matrix3d> Ron_new = Ton_new.block(0,0,3,3);   
+	Eigen::Ref<Matrix3d> Ron = Ton.block(0,0,3,3);
 	// extract translational vectors
 	Eigen::Ref<Vector3d> xyz = Ton.col(3).segment(0,3);
 	Eigen::Ref<Vector3d> xyz_new = Ton_new.col(3).segment(0,3);
@@ -909,25 +978,38 @@ int main(int argc, char **argv)
 	int point_cnt = 0;
 
 	// Initialise forward kinematics
-	for(VERNE.Leg_it = VERNE.Leg.begin(); VERNE.Leg_it <  VERNE.Leg.end(); ++(VERNE.Leg_it))  {
-		// acquire leg data
+	// for(VERNE.Leg_it = VERNE.Leg.begin(); VERNE.Leg_it <  VERNE.Leg.end(); ++(VERNE.Leg_it))  {
+	// 	// acquire leg data
+	// 	Ton = (*(VERNE.Leg_it))->fkine();
 		
-		Ton = fkine((*(VERNE.Leg_it))->legParam->extDenHart, (*(VERNE.Leg_it))->legParam->baseFrame, (*(VERNE.Leg_it))->legParam->toolFrame, (*(VERNE.Leg_it))->jointAngles);
-		(*(VERNE.Leg_it))->Ton = Ton;
-	}
-	homeTon = Ton;
+	// 	cout<<"Ton\n"<<Ton<<endl;
+	// }
+	VERNE.fkinAll();
+
+	homeTon = VERNE.Leg_Map[VERNE.End_effectors[0]]->Ton; //Change this to automatically detect end effector/s
+	
+	/*cout<<"Home\n"<<homeTon<<endl;
+	homeTon(2,3)  = homeTon(2,3)+0;
 	cout<<"Home\n"<<homeTon<<endl;
+	*/
+// m_el.Begin();
+		
+// 	VERNE.iksolve(homeTon);
+
+// 	cout<<"D"<<VERNE.recalcD(homeTon)<<endl;
+// 	for (int i = 0;i<VERNE.Leg_Map["UR5_1"]->jointAngles.rows();i++){
+// 		cout<<VERNE.Leg_Map["UR5_1"]->jointAngles(i)<<endl;
+// 	}
+	
+// cout<<m_el.End()<<endl;
+
 	ros::init(argc, argv, "poe_ik_node");
-	//ros::NodeHandle n;
-
-	//ros::Publisher joint_angles_pub = n.advertise<std_msgs::Float64MultiArray>("/arm/joint_group_position_controller/command", 1000);
-	//ros::Rate loop_rate(10);
-
-	//ros::Subscriber sub = n.subscribe("/ik_goal", 1000, ikCallback);
+	
 	SubscribeAndPublish subpub;
 	ros::spin();
-
-
+	/*
+	//Below here is no longer used - IK is solved in subpub class
+	
 	// }
 	// main loop
 	for(int i = 0; i < POINT_CNT; i++)  {
@@ -946,14 +1028,10 @@ int main(int argc, char **argv)
 		m_el.Begin(); // start calc of elapsed time here
 
 		//Function solves ik to move to Ton_new and updates joint angles in class
-		Ton_new = (Matrix4d()<<  0.0000  , -1.0000  , -0.0000   , 0.0946,
-   -1.0000   ,      0  , -0.0000 ,  -0.1091,
-    0.0000   , 0.0000 ,  -1.0000  ,  0.0396,
-         0     ,    0      ,   0 ,   1.0000).finished();
-		cout<<Ton_new<<endl;
+	
 
-		Vector4d quat = (Vector4d()<<0,0,0,1).finished();
-		Vector3d pose = (Vector3d()<<0.0856,-0.1091,0.0396).finished();
+		//Vector4d quat = (Vector4d()<<0,0,0,1).finished();
+		//Vector3d pose = (Vector3d()<<0.0856,-0.1091,0.0396).finished();
 
 		Ton_new = transformFromPose(quat, pose);
 
@@ -967,8 +1045,8 @@ int main(int argc, char **argv)
 		for((VERNE.Leg_it) = VERNE.Leg.begin(); (VERNE.Leg_it) <  VERNE.Leg.end(); ++(VERNE.Leg_it))  {
 			Ton = (*(VERNE.Leg_it))->Ton;
 			// tr2rpy(rpy, Ton);
-			/*tcp[0] = xyz[0]; tcp[1] = xyz[1]; tcp[2] = xyz[2];
-			tcp[5] = rpy[2];*/
+			//tcp[0] = xyz[0]; tcp[1] = xyz[1]; tcp[2] = xyz[2];
+			//tcp[5] = rpy[2];
 			max_tcp_error = std::max(max_tcp_error, (xyz_new - xyz).norm());
 			// store joint angles
 			int j = 0;
@@ -1009,7 +1087,7 @@ int main(int argc, char **argv)
 	//num_char = ToString(d, "%e", test_data_global[0][2], 15);
 	//cout << num_char << endl;
 	//cout << dest << endl;
-	
+	*/
 }
 
 #else

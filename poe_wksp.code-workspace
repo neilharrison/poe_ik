@@ -72,7 +72,12 @@
 			"cfenv": "cpp",
 			"typeindex": "cpp",
 			"typeinfo": "cpp",
-			"core": "cpp"
+			"core": "cpp",
+			"any": "cpp",
+			"codecvt": "cpp",
+			"regex": "cpp",
+			"future": "cpp",
+			"variant": "cpp"
 		},
 		"python.autoComplete.extraPaths": [
 			"/home/neil/catkin_ws/devel/lib/python2.7/dist-packages",

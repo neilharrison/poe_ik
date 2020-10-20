@@ -14,6 +14,7 @@
 #include <stdlib.h>
 
 #include <stdio.h>
+#include <iostream>
 //#include <tchar.h>
 
 
@@ -24,7 +25,10 @@ using Eigen::Matrix4d;
 using Eigen::Vector3d;
 
 //typedef Mat4d test4;
-
+Matrix4d linkTransform(VectorXd dh_link_param, double current_joint_angle);
+MatrixXd Adjnt(Matrix4d &T);
+MatrixXd AdjInvH(Matrix4d &T);
+VectorXd poseDiff(Matrix4d &Ton_new, Matrix4d &Ton);
 
 struct t_kinParam{
 	MatrixXd extDenHart;		// extended Denavit-Hartenberg parameters (8 elements)

@@ -10,7 +10,6 @@
 //#include "SerialChain.h"
 #include "Pkm.h"
 #include "Elapsed.h"
-#include <iostream>
 
 #include <Eigen/Eigen>
 #include <Eigen/Geometry>
@@ -18,6 +17,7 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include "std_msgs/Float64MultiArray.h"
+#include "std_msgs/Float64.h"
 #include "geometry_msgs/PoseStamped.h"
 
 using std::cout;
@@ -43,7 +43,7 @@ CPkm VERNE;
 void saveTestData (char *, MatrixXd &d);
 
 //Matd addDiagBlock(Matd &, Matd &);
-VectorXd poseDiff(Matrix3d Rnew, Matrix3d R, Vector3d xyz_new, Vector3d xyz);
+
 MatrixXd BstarS(MatrixXd &dh, Matrix4d &baseFrame, VectorXd &q, int &leg_index);
 MatrixXd bm_jacobian(MatrixXd &dh, Matrix4d &baseFrame, VectorXd &q, Matrix3d &Ron, Vector3d &xyz);
 VectorXd ikinVERNE_POE(MatrixXd &dh, Matrix4d &baseFrame, Matrix3d &Ron_new, Matrix3d &Ron, Vector3d &xyz_new, Vector3d &xyz, VectorXd &q);
@@ -56,21 +56,28 @@ void Initialize(void);
 
 MatrixXd pinv(MatrixXd M);
 // Matd pinv2(Matd &);
-Matrix4d linkTransform(VectorXd dh_link_param, double current_joint_angle);
+
 
 Matrix4d transformFromPose(Vector4d &q, Vector3d &p);
 
 void iksolve(Matrix4d &Ton_new, int &n_it);
 Matrix4d homeTon;
 
-//Ros subscriber/publisher
+//Ros subscriber/publisher 
+//This does everything! subscribes to ik goals, calls ik solve, and publishes joint angles
 class SubscribeAndPublish
 {
 public:
   	SubscribeAndPublish()
   	{
     	//Topic you want to publish
-    	pub_ = n_.advertise<std_msgs::Float64MultiArray>("/arm/joint_group_position_controller/command", 1000);
+    	pub_UR1 = n_.advertise<std_msgs::Float64MultiArray>("/UR1/joint_group_position_controller/command", 1000);
+		pub_UR2 = n_.advertise<std_msgs::Float64MultiArray>("/UR2/joint_group_position_controller/command", 1000);
+
+		pub_joint_A = n_.advertise<std_msgs::Float64>("/wrist/joint1_position_controller/command", 1000);
+		pub_joint_B = n_.advertise<std_msgs::Float64>("/wrist/joint2_position_controller/command", 1000);
+
+
     	//Topic you want to subscribe
     	sub_ = n_.subscribe("/ik_goal", 1000, &SubscribeAndPublish::ikCallback, this);
   	}
@@ -80,31 +87,70 @@ public:
 
 		Vector3d pos = (Vector3d()<<msg->pose.position.x,msg->pose.position.y,msg->pose.position.z).finished();
 		Vector4d quat = (Vector4d()<<msg->pose.orientation.x,msg->pose.orientation.y,msg->pose.orientation.z,msg->pose.orientation.w).finished();
-		Matrix4d Ton_new = homeTon * transformFromPose(quat,pos) ;
-		int n_it=0;
-		//cout<<Ton_new<<endl;
-		iksolve(Ton_new,n_it);
-		std_msgs::Float64MultiArray ja;
-		ja.data.clear();
 
-		for((VERNE.Leg_it) = VERNE.Leg.begin(); (VERNE.Leg_it) <  VERNE.Leg.end(); ++(VERNE.Leg_it))  {
-			//cout<<(*(VERNE.Leg_it))->jointAngles<<endl;
-			//cout<<(*(VERNE.Leg_it))->Ton<<endl;
-			for (int i = 0; i < (*(VERNE.Leg_it))->jointAngles.size(); i++){
-				ja.data.push_back((*(VERNE.Leg_it))->jointAngles(i));
-				//cout<<ja.data[i]<<endl;
-			}
-			
+		//Making sure pos is within reach
+		cout<<pos<<endl;
+		//Matrix4d temptest =(Matrix4d()<<1,0,0,0.1,0,1,0,0,0,0,1,0,0,0,0,1).finished();
+		Matrix4d Ton_new = homeTon * transformFromPose(quat,pos) ;
+		//Matrix4d Ton_new = homeTon * temptest;
+		/*
+		/*
+		Eigen::Ref<Vector3d> pos_new = Ton_new.col(3).segment(0,3);
+		//0.0767 from wrist geometry - sqrt(2*L^2 -2*L^2*cos(angle))
+		pos_new = 0.076693586680288*(pos_new/pos_new.norm());
+		cout<<pos_new<<endl;
+		
+		cout<<Ton_new<<endl;
+		*/
+
+		int n_it=0;
+		m_el.Begin();
+		//iksolve(Ton_new,n_it);
+		VERNE.iksolve(Ton_new);
+		cout<<m_el.End()<<endl;
+
+		std_msgs::Float64MultiArray joints_UR1;
+		std_msgs::Float64MultiArray joints_UR2;
+
+		std_msgs::Float64 joint_a;
+		std_msgs::Float64 joint_b;
+	
+	
+		joints_UR1.data.clear();
+		joints_UR2.data.clear();
+
+		for (int i = 0;i<VERNE.Leg_Map["UR5_1"]->jointAngles.rows();i++){
+			joints_UR1.data.push_back(VERNE.Leg_Map["UR5_1"]->jointAngles(i));
+			std::cout<<"UR1"<<VERNE.Leg_Map["UR5_1"]->jointAngles(i)<<std::endl;
 		}
-		pub_.publish(ja);
-		ros::spinOnce();
-		cout<<n_it<<endl;
+		for (int i = 0;i<VERNE.Leg_Map["UR5_2"]->jointAngles.rows();i++){
+			joints_UR2.data.push_back(VERNE.Leg_Map["UR5_2"]->jointAngles(i));
+			std::cout<<"UR2"<<VERNE.Leg_Map["UR5_2"]->jointAngles(i)<<std::endl;
+
+		}
+
+
+		// joint_a.data = ja.data[0];
+		// joint_b.data = ja.data[4];
+		// cout<<joint_a.data<<endl;
+		// cout<<joint_b.data<<endl;
+		pub_UR1.publish(joints_UR1);
+		pub_UR2.publish(joints_UR2);
+
+		//pub_joint_A.publish(joint_a);
+		//pub_joint_B.publish(joint_b);
+		//ros::spinOnce();
+		//cout<<n_it<<endl;
   	}
 
 
 private:
   	ros::NodeHandle n_; 
-  	ros::Publisher pub_;
+  	ros::Publisher pub_UR1;
+	ros::Publisher pub_UR2;
+
+	ros::Publisher pub_joint_A;
+	ros::Publisher pub_joint_B;
   	ros::Subscriber sub_;
 
 };//End of class SubscribeAndPublish

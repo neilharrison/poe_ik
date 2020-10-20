@@ -19,7 +19,7 @@ CElapsed::CElapsed()
 {
 	// get the frequency of the counter
 //	m_iInitialized = QueryPerformanceFrequency( (LARGE_INTEGER *)&m_iFrequency );
-std::cout<<"Init elapsed"<<std::endl;
+//std::cout<<"Init elapsed"<<std::endl;
 m_iInitialized = 1;
 }
 

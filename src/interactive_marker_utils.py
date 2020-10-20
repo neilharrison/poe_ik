@@ -23,7 +23,7 @@ class InteractiveMarkerUtil:
         self.feedback_util = InteractiveMarkerFeedbackUtil()
         # create an interactive marker for our server
         int_marker = InteractiveMarker()
-        int_marker.header.frame_id = "base_link"
+        int_marker.header.frame_id = "map"
         int_marker.name = "interactive_marker_" + str(r.randint(0, high=99999999))
         int_marker.pose.position.x = init_pos[0]
         int_marker.pose.position.y = init_pos[1]
